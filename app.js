@@ -48,6 +48,13 @@ function setResult(result) {
 
 function selectStrategy(strategy) {
     selectedStrategy = strategy;
+    strategyButtons.forEach(button => {
+        if (button.dataset.strategy === strategy) {
+            button.classList.add('selected');
+        } else {
+            button.classList.remove('selected');
+        }
+    });
     updateRecommendation();
 }
 
