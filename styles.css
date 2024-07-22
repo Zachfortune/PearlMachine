@@ -2,14 +2,21 @@ body {
     font-family: Arial, sans-serif;
     text-align: center;
     background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
 }
 
 .container {
     margin: 20px auto;
     width: 80%;
+    max-width: 1200px;
 }
 
-.controls {
+h1 {
+    color: #333;
+}
+
+.controls, .strategy-controls {
     margin: 20px 0;
 }
 
@@ -17,15 +24,53 @@ button {
     margin: 5px;
     padding: 10px 20px;
     font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #007BFF;
+    color: white;
+    transition: background-color 0.3s;
+}
+
+button:disabled {
+    background-color: #aaa;
+    cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+    background-color: #0056b3;
+}
+
+.strategy-controls {
+    margin: 20px 0;
+}
+
+.strategy-button {
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #28a745;
+    color: white;
+    transition: background-color 0.3s;
+}
+
+.strategy-button:hover {
+    background-color: #218838;
 }
 
 .chart-container {
     width: 100%;
     height: 400px;
+    margin-top: 20px;
 }
 
 canvas {
     background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
 .recommendation {
