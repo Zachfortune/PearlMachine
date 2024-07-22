@@ -3,10 +3,12 @@ const bankerButton = document.getElementById('bankerButton');
 const winButton = document.getElementById('winButton');
 const loseButton = document.getElementById('loseButton');
 const recommendedBetElement = document.getElementById('recommendedBet');
+const strategyButtons = document.querySelectorAll('.strategy-button');
 
 let history = [];
 let lastBet = null;
 let lastResult = null;
+let selectedStrategy = 'repeatLastBet';
 
 // Strategies
 const strategies = {
@@ -26,6 +28,7 @@ playerButton.addEventListener('click', () => setBet('Player'));
 bankerButton.addEventListener('click', () => setBet('Banker'));
 winButton.addEventListener('click', () => setResult('Win'));
 loseButton.addEventListener('click', () => setResult('Lose'));
+strategyButtons.forEach(button => button.addEventListener('click', () => selectStrategy(button.dataset.strategy)));
 
 function setBet(bet) {
     lastBet = bet;
@@ -43,13 +46,58 @@ function setResult(result) {
     loseButton.disabled = true;
 }
 
+function selectStrategy(strategy) {
+    selectedStrategy = strategy;
+    updateRecommendation();
+}
+
 function updateChart() {
-    // Update the chart with the latest history (Implement using Chart.js or similar library)
+    const ctx = document.getElementById('historyChart').getContext('2d');
+    const data = {
+        labels: history.map((_, index) => index + 1),
+        datasets: [{
+            label: 'History',
+            data: history.map(hand => hand.bet === 'Player' ? 1 : 2),
+            backgroundColor: history.map(hand => hand.bet === 'Player' ? 'blue' : 'red')
+        }]
+    };
+
+    if (window.chartInstance) {
+        window.chartInstance.destroy();
+    }
+
+    window.chartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: data,
+        options: {
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Hand Number'
+                    }
+                },
+                y: {
+                    ticks: {
+                        callback: function(value) {
+                            return value === 1 ? 'Player' : 'Banker';
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Bet'
+                    },
+                    min: 0,
+                    max: 3,
+                    stepSize: 1
+                }
+            }
+        }
+    });
 }
 
 function updateRecommendation() {
-    const strategyName = 'followTrend'; // Change this to test different strategies
-    const recommendedBet = strategies[strategyName]();
+    const recommendedBet = strategies[selectedStrategy]();
     recommendedBetElement.textContent = recommendedBet;
 }
 
@@ -89,3 +137,4 @@ function zachsSecretSauce2() {
 
 // Initialize chart
 updateChart();
+updateRecommendation();
