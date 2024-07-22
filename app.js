@@ -133,27 +133,26 @@ function zachsSecretSauce1() {
 }
 
 function zachsSecretSauce2() {
-    const lastFour = history.slice(-4).map(hand => hand.bet);
-    const lastFourPlayers = lastFour.filter(bet => bet === 'Player').length;
-    const lastFourBankers = lastFour.filter(bet => bet === 'Banker').length;
-    
-    if (lastFourPlayers === 4) {
-        return 'Banker';
-    } else if (lastFourBankers === 4) {
+    const lastFour = history.slice(-4);
+    const lastFourBets = lastFour.map(hand => hand.bet);
+    const lastEight = history.slice(-8);
+    const lastEightBets = lastEight.map(hand => hand.bet);
+
+    const checkSequence = (bets, target) => bets.slice(-4).every(bet => bet === target);
+
+    if (checkSequence(lastEightBets, 'Player') && checkSequence(lastFourBets, 'Banker')) {
         return 'Player';
-    }
-    
-    const lastEight = history.slice(-8).map(hand => hand.bet);
-    const lastFourPlayersInEight = lastEight.filter(bet => bet === 'Player').length;
-    const lastFourBankersInEight = lastEight.filter(bet => bet === 'Banker').length;
-    
-    if (lastFourPlayersInEight === 4) {
+    } else if (checkSequence(lastEightBets, 'Banker') && checkSequence(lastFourBets, 'Player')) {
         return 'Banker';
-    } else if (lastFourBankersInEight === 4) {
-        return 'Player';
     }
-    
-    return followTrend();
+
+    if (checkSequence(lastFourBets, 'Player')) {
+        return 'Player';
+    } else if (checkSequence(lastFourBets, 'Banker')) {
+        return 'Banker';
+    }
+
+    return lastBet === 'Player' ? 'Banker' : 'Player';
 }
 
 // Initialize chart
