@@ -61,6 +61,10 @@ button:hover:not(:disabled) {
     background-color: #218838;
 }
 
+.strategy-button.selected {
+    background-color: #155724;
+}
+
 .chart-container {
     width: 100%;
     height: 400px;
