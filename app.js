@@ -133,12 +133,26 @@ function zachsSecretSauce1() {
 }
 
 function zachsSecretSauce2() {
-    const lastFour = history.slice(-4);
-    const lastFourPlayers = lastFour.filter(hand => hand.bet === 'Player').length;
-    const lastFourBankers = lastFour.filter(hand => hand.bet === 'Banker').length;
-    if (lastFourPlayers === 4 || lastFourBankers === 4) {
-        return lastFourPlayers === 4 ? 'Banker' : 'Player';
+    const lastFour = history.slice(-4).map(hand => hand.bet);
+    const lastFourPlayers = lastFour.filter(bet => bet === 'Player').length;
+    const lastFourBankers = lastFour.filter(bet => bet === 'Banker').length;
+    
+    if (lastFourPlayers === 4) {
+        return 'Banker';
+    } else if (lastFourBankers === 4) {
+        return 'Player';
     }
+    
+    const lastEight = history.slice(-8).map(hand => hand.bet);
+    const lastFourPlayersInEight = lastEight.filter(bet => bet === 'Player').length;
+    const lastFourBankersInEight = lastEight.filter(bet => bet === 'Banker').length;
+    
+    if (lastFourPlayersInEight === 4) {
+        return 'Banker';
+    } else if (lastFourBankersInEight === 4) {
+        return 'Player';
+    }
+    
     return followTrend();
 }
 
